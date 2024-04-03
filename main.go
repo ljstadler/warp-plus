@@ -46,14 +46,14 @@ func run() error {
 	installId := generateCharacters(22)
 
 	body, bodyBytes := map[string]any{
-		"key":          generateCharacters(43) + "=",
-		"install_id":   installId,
 		"fcm_token":    installId + ":APA91b" + generateCharacters(134),
+		"install_id":   installId,
+		"key":          generateCharacters(43) + "=",
+		"locale":       "en_US",
 		"referrer":     ID,
-		"warp_enabled": false,
-		"tos":          time.Now().Format("2006-01-02T15:04:05.999") + "+02:00",
+		"tos":          time.Now().Format("2006-01-02T15:04:05.999-07:00"),
 		"type":         "Android",
-		"locale":       "es_ES",
+		"warp_enabled": false,
 	}, new(bytes.Buffer)
 
 	if err := json.NewEncoder(bodyBytes).Encode(body); err != nil {
@@ -66,10 +66,10 @@ func run() error {
 	}
 
 	req.Header = map[string][]string{
+		"Accept-Encoding": {"gzip"},
+		"Connection":      {"Keep-Alive"},
 		"Content-Type":    {"application/json; charset=UTF-8"},
 		"Host":            {"api.cloudflareclient.com"},
-		"Connection":      {"Keep-Alive"},
-		"Accept-Encoding": {"gzip"},
 		"User-Agent":      {"okhttp/3.12.1"},
 	}
 
